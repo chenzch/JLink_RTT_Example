@@ -46,6 +46,13 @@
 
     ![VOFA+ 截图](vofa+.png)
 
+## 相关资源
+
+- **SEGGER RTT 官方仓库**: [https://github.com/SEGGERMicro/RTT](https://github.com/SEGGERMicro/RTT) - 包含了 RTT 的核心源码及各种平台的示例。
+- **J-Link RTT Telnet 协议说明**: [https://kb.segger.com/J-Link_RTT_TELNET_Channel](https://kb.segger.com/J-Link_RTT_TELNET_Channel) - 详细介绍了如何通过 TCP/IP 端口与 J-Link RTT 进行交互以及配置字符串的格式。
+- **VOFA+ 官网**: [https://www.vofa.plus/](https://www.vofa.plus/) - 插件驱动的高自由度上位机软件。
+    - **说明**: VOFA+ 是一款免费软件。如果用户需要去除软件启动时的消息提示，或者需要增加更多的界面主题，则需要另外付费。
+
 ## 注意事项
 
 - **地址配置**: [start.py](start.py) 需要正确的 RTT 控制块地址。如果重新编译后地址发生变化，必须更新命令行参数。
