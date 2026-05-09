@@ -22,7 +22,7 @@
 2.  **数据流向**:
     - **S32K3**: 运行 `main.c`，将计算好的波形数据写入指定的 RTT 缓冲区。
     - **J-Link GDB Server**: 在 S32DS 调试过程中，GDB Server 会监听本地 TCP 19021 端口。
-    - **start.py**: 脚本连接 19021 端口并发送配置字符串（包含 `SetRTTAddr` 命令）。这一步非常关键，因为它显式指定了 RTT 控制块在 S32K3 内存中的地址，确保调试器能正确找到数据。
+    - **start.py**: 脚本连接 19021 端口并发送配置字符串（包含 `SetRTTAddr` 命令）。这一步非常关键，因为它显式指定了 RTT 控制块在 S32K3 内存中的地址，确保调试器能正确找到数据。运行完以后，再次连接该端口，即可接收数据。
     - **VOFA+**: 选择 `JustFloat` 协议，连接到 19021 端口，接收来自 J-Link 的原始数据流并解析成波形。
 
 ## 使用步骤
@@ -30,13 +30,12 @@
 1.  **编译与调试**: 使用 S32DS 编译 [main.c](main.c) 并启动调试（Debug）。确保 J-Link GDB Server 正在运行。
 2.  **获取控制块地址**:
     - 在编译生成的 `.map` 文件中搜索 `_SEGGER_RTT` 符号，找到其内存地址。
-    - **TCM 地址转换**: 对于 S32K3，如果 `_SEGGER_RTT` 位于 TCM（如 `0x2000....` 或 `0x0000....`），必须将其转换为 **Backdoor 地址** 供 J-Link 使用。
-        - DTCM (0x2000xxxx) -> Backdoor (0x2040xxxx)
-        - ITCM (0x0000xxxx) -> Backdoor (0x0040xxxx)
-    - 例如：`.map` 中显示 `0x20000080`，则实际使用的地址为 `0x20400080`。
+    - **TCM 地址转换**: 对于 S32K3，如果 `_SEGGER_RTT` 位于 DTCM（如 `0x2000....`），必须将其转换为 **Backdoor 地址** 供 J-Link 使用。
+        - DTCM (0x2000xxxx) -> Backdoor (0x2100xxxx)
+    - 例如：`.map` 中显示 `0x20000080`，则实际使用的地址为 `0x21000080`。
 3.  **触发 RTT**: 运行 [start.py](start.py) 脚本，并传入转换后的地址。
     ```bash
-    python3 start.py 0x20400080
+    python3 start.py 0x21000080
     ```
 4.  **可视化展示**:
     - 打开 [VOFA+](https://www.vofa.plus/)。
