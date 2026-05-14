@@ -21,12 +21,7 @@ def format_hex_byte(b: int) -> str:
 
 def main():
     # 处理命令行参数
-    parser = argparse.ArgumentParser(description="TCP 19021 client to receive data.")
-    parser.add_argument("cb_address", nargs="?", default="0x20400080", help="CB Address (default: 0x20400080)")
-    args = parser.parse_args()
-
-    cb_address = args.cb_address
-    fixed_bytes = f"$$SEGGER_TELNET_ConfigStr=RTTCh;0;SetRTTAddr;{cb_address};$$".encode("utf-8")
+    fixed_bytes = f"$$SEGGER_TELNET_ConfigStr=RTTCh;0;SetRTTAddr;0$$".encode("utf-8")
 
     # 捕获 SIGINT (Ctrl+C) 以优雅退出
     signal.signal(signal.SIGINT, lambda signum, frame: sys.exit(0))
@@ -35,7 +30,6 @@ def main():
         try:
             sock.connect((HOST, PORT))
             print(f"[*] 已连接到 {HOST}:{PORT}")
-            print(f"[*] 使用 CB Address: {cb_address}")
 
             # 连接后立即发送固定字符串
             sock.sendall(fixed_bytes)
